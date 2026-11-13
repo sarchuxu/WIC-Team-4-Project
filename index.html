@@ -1,21 +1,468 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Project Title</title>
-   	   <link rel="stylesheet" href="styles.css" type=”text/css”/>
-        <link rel="icon" href="" type="image/x-icon" />
-        <script type="text/javascript" src="script.js"></script>
-    </head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>banana banana banana</title>
+    <meta
+      name="description"
+      content="AI-powered nutrition tracking and healthy eating companion."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">V</div>
+          <div>
+            <p class="eyebrow">Wellness companion</p>
+            <h1>VitaCoach</h1>
+          </div>
+        </div>
 
+        <nav class="nav-list" aria-label="Main navigation">
+          <button class="nav-item active" data-target="scan-view">
+            <span>Scan</span>
+          </button>
+          <button class="nav-item" data-target="dashboard-view">
+            <span>Dashboard</span>
+          </button>
+          <button class="nav-item" data-target="history-view">
+            <span>Food History</span>
+          </button>
+          <button class="nav-item" data-target="coach-view">
+            <span>AI Coach</span>
+          </button>
+          <button class="nav-item" data-target="profile-view">
+            <span>Profile</span>
+          </button>
+        </nav>
 
-    <body>
-        <!-- Add HTML markup elements for your web site below -->
-        <h1>Welcome to Project Title!</h1>
-        <p>Here are some more details.</p>
-    </body>
-    <footer>
-        <p>Made by: WIC &#128508;</p>
-    </footer>
+        <div class="side-summary card">
+          <p class="muted">Daily goal</p>
+          <div class="big-value" id="side-calories">0 kcal</div>
+          <div class="mini-row">
+            <span>Protein</span>
+            <strong id="side-protein">0g</strong>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Good morning</p>
+            <h2 id="welcome-name">Alicia</h2>
+          </div>
+          <button class="secondary-btn" id="open-onboarding">Update goals</button>
+        </header>
+
+        <section id="scan-view" class="view active">
+          <div class="hero-card card">
+            <div class="camera-panel">
+              <div class="camera-header">
+                <div>
+                  <p class="eyebrow">Camera-first tracking</p>
+                  <h3>Scan nutrition labels</h3>
+                </div>
+                <button class="small-action" id="enable-camera">Enable camera</button>
+              </div>
+
+              <div class="camera-stage">
+                <video id="camera-feed" autoplay playsinline muted></video>
+                <div class="scan-overlay" aria-hidden="true">
+                  <div class="scan-frame"></div>
+                </div>
+              </div>
+
+              <div class="camera-actions">
+                <button class="primary-btn" id="scan-sample">Use sample label</button>
+                <label class="secondary-btn upload-btn" for="image-upload">Upload photo</label>
+                <input id="image-upload" type="file" accept="image/*" hidden />
+              </div>
+            </div>
+
+            <div class="scan-results">
+              <div class="results-header">
+                <p class="eyebrow">Detected food</p>
+                <h3>Label confirmation</h3>
+              </div>
+
+              <div id="parsed-food-card" class="parsed-food-card empty-state">
+                <p>Scan a nutrition label to populate the food details.</p>
+              </div>
+
+              <form id="scan-form" class="scan-form">
+                <div class="form-row">
+                  <label>
+                    Product name
+                    <input id="food-name" type="text" value="Protein Crunch Granola Bar" />
+                  </label>
+                </div>
+
+                <div class="form-grid two-col">
+                  <label>
+                    Calories
+                    <input id="food-calories" type="number" value="180" />
+                  </label>
+                  <label>
+                    Serving size
+                    <input id="food-serving-size" type="number" value="35" />
+                  </label>
+                </div>
+
+                <div class="form-grid three-col">
+                  <label>
+                    Protein
+                    <input id="food-protein" type="number" value="10" />
+                  </label>
+                  <label>
+                    Carbs
+                    <input id="food-carbs" type="number" value="18" />
+                  </label>
+                  <label>
+                    Fat
+                    <input id="food-fat" type="number" value="7" />
+                  </label>
+                </div>
+
+                <div class="form-grid three-col">
+                  <label>
+                    Fiber
+                    <input id="food-fiber" type="number" value="4" />
+                  </label>
+                  <label>
+                    Sugar
+                    <input id="food-sugar" type="number" value="6" />
+                  </label>
+                  <label>
+                    Sodium
+                    <input id="food-sodium" type="number" value="150" />
+                  </label>
+                </div>
+
+                <div class="consumption-grid">
+                  <label>
+                    Portion consumed
+                    <input id="consumed-quantity" type="number" min="0.1" step="0.1" value="1" />
+                  </label>
+                  <label>
+                    Unit
+                    <select id="consumed-unit">
+                      <option value="serving">serving</option>
+                      <option value="g">grams</option>
+                      <option value="oz">ounces</option>
+                      <option value="cup">cups</option>
+                      <option value="piece">piece(s)</option>
+                    </select>
+                  </label>
+                  <label>
+                    Meal type
+                    <select id="meal-type">
+                      <option value="breakfast">Breakfast</option>
+                      <option value="lunch">Lunch</option>
+                      <option value="dinner">Dinner</option>
+                      <option value="snack" selected>Snack</option>
+                    </select>
+                  </label>
+                </div>
+
+                <div class="form-actions">
+                  <button type="button" class="secondary-btn" id="manual-entry">Add manual entry</button>
+                  <button type="submit" class="primary-btn">Save to food log</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section id="dashboard-view" class="view">
+          <div class="summary-row">
+            <div class="summary-card card accent">
+              <p class="muted">Calories</p>
+              <div class="value-stack">
+                <h3 id="today-calories">0</h3>
+                <span id="calories-remaining">0 left</span>
+              </div>
+            </div>
+            <div class="summary-card card">
+              <p class="muted">Protein</p>
+              <div class="value-stack">
+                <h3 id="today-protein">0g</h3>
+                <span id="protein-remaining">0g left</span>
+              </div>
+            </div>
+            <div class="summary-card card">
+              <p class="muted">Fiber</p>
+              <div class="value-stack">
+                <h3 id="today-fiber">0g</h3>
+                <span id="fiber-goal">goal</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-grid">
+            <div class="card analytics-card">
+              <div class="card-header compact">
+                <p class="eyebrow">Daily progress</p>
+                <h3>Goal completion</h3>
+              </div>
+
+              <div class="ring-wrap">
+                <div id="progress-ring" class="progress-ring">
+                  <div class="ring-center">
+                    <span id="ring-percent">0%</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="legend-list">
+                <div>
+                  <span class="dot green"></span>
+                  <span>Calories</span>
+                </div>
+                <div>
+                  <span class="dot gold"></span>
+                  <span>Protein</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card analytics-card">
+              <div class="card-header compact">
+                <p class="eyebrow">Macro targets</p>
+                <h3>Nutrition balance</h3>
+              </div>
+
+              <div class="meter-group">
+                <div class="meter-label">
+                  <span>Protein</span>
+                  <strong id="meter-protein-label">0/0</strong>
+                </div>
+                <div class="meter"><span id="meter-protein" class="fill green"></span></div>
+              </div>
+
+              <div class="meter-group">
+                <div class="meter-label">
+                  <span>Carbohydrates</span>
+                  <strong id="meter-carb-label">0/0</strong>
+                </div>
+                <div class="meter"><span id="meter-carb" class="fill blue"></span></div>
+              </div>
+
+              <div class="meter-group">
+                <div class="meter-label">
+                  <span>Fat</span>
+                  <strong id="meter-fat-label">0/0</strong>
+                </div>
+                <div class="meter"><span id="meter-fat" class="fill orange"></span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header compact">
+              <p class="eyebrow">Nutrient focus</p>
+              <h3>Other metrics</h3>
+            </div>
+
+            <div class="metric-grid">
+              <div class="metric-box">
+                <p>Carbs</p>
+                <strong id="daily-carbs">0g</strong>
+              </div>
+              <div class="metric-box">
+                <p>Fat</p>
+                <strong id="daily-fat">0g</strong>
+              </div>
+              <div class="metric-box">
+                <p>Sugar</p>
+                <strong id="daily-sugar">0g</strong>
+              </div>
+              <div class="metric-box">
+                <p>Sodium</p>
+                <strong id="daily-sodium">0mg</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="card list-card">
+            <div class="card-header compact">
+              <p class="eyebrow">Daily log</p>
+              <h3>Meals and snacks</h3>
+            </div>
+            <div id="dashboard-log" class="log-list"></div>
+          </div>
+        </section>
+
+        <section id="history-view" class="view">
+          <div class="card list-card">
+            <div class="card-header compact">
+              <p class="eyebrow">Food history</p>
+              <h3>Recently logged foods</h3>
+            </div>
+            <div id="history-list" class="history-list"></div>
+          </div>
+        </section>
+
+        <section id="coach-view" class="view">
+          <div class="chat-grid">
+            <div class="card coach-panel">
+              <div class="card-header compact">
+                <p class="eyebrow">AI nutrition coach</p>
+                <h3>Personalized guidance</h3>
+              </div>
+
+              <div id="coach-response" class="coach-response"></div>
+
+              <div class="filter-row" aria-label="Recommendation types">
+                <button class="filter-chip active" data-coach-filter="balanced" type="button">Balanced</button>
+                <button class="filter-chip" data-coach-filter="high-protein" type="button">High protein</button>
+                <button class="filter-chip" data-coach-filter="low-calorie" type="button">Low calorie</button>
+                <button class="filter-chip" data-coach-filter="snack" type="button">Quick snack</button>
+              </div>
+
+              <div class="chat-input-row">
+                <input id="coach-input" type="text" placeholder="Ask: What should I eat for dinner?" />
+                <button class="primary-btn" id="send-coach">Ask</button>
+              </div>
+            </div>
+
+            <div class="card recommendation-panel">
+              <div class="card-header compact">
+                <p class="eyebrow">Smart suggestions</p>
+                <h3>Recommended foods</h3>
+              </div>
+              <div id="recommendations-list" class="recommendation-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="profile-view" class="view">
+          <div class="card settings-card">
+            <div class="card-header compact">
+              <p class="eyebrow">Profile</p>
+              <h3>Nutrition preferences</h3>
+            </div>
+
+            <form id="settings-form" class="settings-form">
+              <div class="form-grid two-col">
+                <label>
+                  Age
+                  <input id="profile-age" type="number" />
+                </label>
+                <label>
+                  Activity
+                  <select id="profile-activity">
+                    <option value="light">Light</option>
+                    <option value="moderate">Moderate</option>
+                    <option value="active">Active</option>
+                    <option value="athlete">Athlete</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="form-grid two-col">
+                <label>
+                  Current weight (kg)
+                  <input id="profile-weight" type="number" />
+                </label>
+                <label>
+                  Goal weight (kg)
+                  <input id="profile-target-weight" type="number" />
+                </label>
+              </div>
+
+              <div class="chips-group">
+                <p class="small-label">Main goals</p>
+                <label class="chip-option"><input type="checkbox" name="goal" value="Lose weight" /> Lose weight</label>
+                <label class="chip-option"><input type="checkbox" name="goal" value="Maintain current weight" /> Maintain current weight</label>
+                <label class="chip-option"><input type="checkbox" name="goal" value="Build muscle" /> Build muscle</label>
+                <label class="chip-option"><input type="checkbox" name="goal" value="Eat healthier" /> Eat healthier</label>
+                <label class="chip-option"><input type="checkbox" name="goal" value="Increase protein intake" /> Increase protein</label>
+              </div>
+
+              <div class="chips-group">
+                <p class="small-label">Dietary preferences</p>
+                <label class="chip-option"><input type="checkbox" name="diet" value="Mediterranean" /> Mediterranean</label>
+                <label class="chip-option"><input type="checkbox" name="diet" value="High-protein" /> High-protein</label>
+                <label class="chip-option"><input type="checkbox" name="diet" value="Vegetarian" /> Vegetarian</label>
+                <label class="chip-option"><input type="checkbox" name="diet" value="Low-carb" /> Low-carb</label>
+                <label class="chip-option"><input type="checkbox" name="diet" value="Dairy-free" /> Dairy-free</label>
+              </div>
+
+              <div class="form-actions right-align">
+                <button type="submit" class="primary-btn">Save profile</button>
+              </div>
+            </form>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="mobile-nav" aria-label="Mobile navigation">
+      <button class="mobile-item active" data-target="scan-view">Scan</button>
+      <button class="mobile-item" data-target="dashboard-view">Dashboard</button>
+      <button class="mobile-item" data-target="history-view">History</button>
+      <button class="mobile-item" data-target="coach-view">AI Coach</button>
+      <button class="mobile-item" data-target="profile-view">Profile</button>
+    </div>
+
+    <div id="onboarding-modal" class="modal">
+      <div class="modal-card card">
+        <div class="card-header compact">
+          <p class="eyebrow">Welcome</p>
+          <h3>Set up your nutrition goals</h3>
+        </div>
+
+        <form id="onboarding-form" class="settings-form">
+          <div class="form-grid two-col">
+            <label>
+              Name
+              <input id="onboarding-name" type="text" value="Alicia" />
+            </label>
+            <label>
+              Age
+              <input id="onboarding-age" type="number" value="29" />
+            </label>
+          </div>
+
+          <div class="form-grid two-col">
+            <label>
+              Height (cm)
+              <input id="onboarding-height" type="number" value="168" />
+            </label>
+            <label>
+              Current weight (kg)
+              <input id="onboarding-weight" type="number" value="64" />
+            </label>
+          </div>
+
+          <div class="chips-group">
+            <p class="small-label">What are your main goals?</p>
+            <label class="chip-option"><input type="checkbox" name="onboarding-goal" value="Lose weight" checked /> Lose weight</label>
+            <label class="chip-option"><input type="checkbox" name="onboarding-goal" value="Increase protein intake" checked /> Increase protein</label>
+            <label class="chip-option"><input type="checkbox" name="onboarding-goal" value="Eat healthier" checked /> Eat healthier</label>
+            <label class="chip-option"><input type="checkbox" name="onboarding-goal" value="Track calories" /> Track calories</label>
+          </div>
+
+          <div class="chips-group">
+            <p class="small-label">Dietary preferences</p>
+            <label class="chip-option"><input type="checkbox" name="onboarding-diet" value="Mediterranean" checked /> Mediterranean</label>
+            <label class="chip-option"><input type="checkbox" name="onboarding-diet" value="High-protein" checked /> High-protein</label>
+            <label class="chip-option"><input type="checkbox" name="onboarding-diet" value="Low-sodium" /> Low-sodium</label>
+            <label class="chip-option"><input type="checkbox" name="onboarding-diet" value="Dairy-free" /> Dairy-free</label>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="secondary-btn" id="skip-onboarding">Use demo</button>
+            <button type="submit" class="primary-btn">Start tracking</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
 </html>
