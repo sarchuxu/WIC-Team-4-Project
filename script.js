@@ -164,9 +164,9 @@ async function extractNutritionFromImage(dataUrl, fallbackName = 'Scanned Food')
 Inspect the provided image carefully and follow these rules with ZERO exceptions:
 1. NEVER guess, estimate, or hallucinate numbers. Only extract numbers that are clearly printed on a Nutrition Facts / nutritional information label.
 2. First check if the image actually shows a food package or Nutrition Facts label:
-   - If the image is NOT a food product or nutrition label (e.g., a person, selfie, pet, scenery, screen, blank wall, random object), set "status" to "INVALID_IMAGE" and explain briefly in "reason".
+  - If the image is NOT a food product or nutrition label (e.g., a person, selfie, pet, scenery, screen, blank wall, random object), set "status" to "INVALID_IMAGE" and explain briefly in "reason".
 3. Next check image clarity:
-   - If a nutrition label is present, but the text is too blurry, out of focus, cut off, or glare-obscured to read calories or serving size with certainty, set "status" to "BLURRY_OR_UNCLEAR" and explain in "reason". Do NOT guess values.
+  - If a nutrition label is present, but the text is too blurry, out of focus, cut off, or glare-obscured to read calories or serving size with certainty, set "status" to "BLURRY_OR_UNCLEAR" and explain in "reason". Do NOT guess values.
 4. Only when a Nutrition Facts label is clearly readable, set "status" to "VALID" and populate the exact numbers per serving (use 0 only if a specific nutrient row is visibly printed as 0 or omitted from a standard label while calories and serving size are clear).
 
 Return ONLY valid JSON matching this exact schema:
@@ -273,6 +273,7 @@ function closeDrawer() {
 }
 
 function setActiveView(viewId) {
+  stopCameraStream();
   document.querySelectorAll('.drawer-item').forEach((btn) => {
     btn.classList.toggle('active', btn.dataset.target === viewId);
   });
@@ -283,13 +284,43 @@ function setActiveView(viewId) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+/* Stop Active Webcam Hardware & Hide Live Video Feed Immediately */
+function stopCameraStream() {
+  if (cameraStream) {
+    cameraStream.getTracks().forEach((track) => track.stop());
+    cameraStream = null;
+  }
+  const video = document.getElementById('camera-feed');
+  if (video) {
+    video.srcObject = null;
+    video.classList.add('hidden');
+  }
+  const captureBtn = document.getElementById('capture-photo-btn');
+  if (captureBtn) {
+    captureBtn.classList.add('hidden');
+  }
+  const cancelBtn = document.getElementById('cancel-camera-btn');
+  if (cancelBtn) {
+    cancelBtn.classList.add('hidden');
+  }
+}
+
+/* Detect Mobile Phones & Tablets (including iPads in desktop mode) */
+function isMobileOrTabletDevice() {
+  const ua = navigator.userAgent || '';
+  const isTouchMac = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+  return /Android|iPhone|iPad|iPod|Mobile|Tablet/i.test(ua) || isTouchMac;
+}
+
 /* Reset Scanner back to Clean Initial State */
 function resetScannerToCleanState(showAddedBanner = false, addedText = '') {
+  stopCameraStream();
   hideScanError();
   document.getElementById('nutrition-reveal').classList.add('hidden');
   document.getElementById('captured-preview').classList.add('hidden');
   document.getElementById('reticle-overlay').classList.remove('hidden');
   document.getElementById('image-upload').value = '';
+  document.getElementById('mobile-camera-capture').value = '';
   document.getElementById('consumed-quantity').value = 1;
   document.getElementById('consumed-unit').value = 'serving';
   document.querySelectorAll('[data-portion]').forEach((btn) => {
@@ -850,13 +881,27 @@ function handleOnboardingSubmit(event) {
   }
 }
 
-/* Laptop & Mobile Camera Stream + Capture Photo */
+/* Device-Aware Camera Flow:
+   - Mobile & Tablet: Launches native rear camera (capture="environment") and auto-closes after snap
+   - Laptop / Desktop: Opens front webcam preview, then shuts off & hides camera immediately upon capture */
 async function startCamera() {
+  hideScanError();
+
+  // Phones & Tablets -> open rear camera directly
+  if (isMobileOrTabletDevice()) {
+    stopCameraStream();
+    const mobileInput = document.getElementById('mobile-camera-capture');
+    mobileInput.value = '';
+    mobileInput.click();
+    return;
+  }
+
+  // Laptop / Desktop -> open front webcam inside viewfinder
   const video = document.getElementById('camera-feed');
   const previewImg = document.getElementById('captured-preview');
   const captureBtn = document.getElementById('capture-photo-btn');
+  const cancelBtn = document.getElementById('cancel-camera-btn');
 
-  hideScanError();
   previewImg.classList.add('hidden');
   video.classList.remove('hidden');
   document.getElementById('reticle-overlay').classList.remove('hidden');
@@ -870,14 +915,18 @@ async function startCamera() {
   }
 
   try {
-    if (cameraStream) {
-      cameraStream.getTracks().forEach((track) => track.stop());
-    }
-    cameraStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+    stopCameraStream();
+    cameraStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'user' },
+      audio: false
+    });
+    video.classList.remove('hidden');
     video.srcObject = cameraStream;
     await video.play();
     captureBtn.classList.remove('hidden');
+    cancelBtn.classList.remove('hidden');
   } catch {
+    stopCameraStream();
     showScanError(
       'Camera Permission Blocked',
       'Please allow camera access in your browser address bar, or use Upload Photo instead.'
@@ -898,11 +947,17 @@ function captureCameraFrame() {
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
   const ctx = canvas.getContext('2d');
+  ctx.save();
   ctx.translate(canvas.width, 0);
   ctx.scale(-1, 1);
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  ctx.restore();
 
   const dataUrl = canvas.toDataURL('image/jpeg', 0.88);
+
+  // Immediately stop the webcam and hide the live video feed
+  stopCameraStream();
+
   previewImg.src = dataUrl;
   previewImg.classList.remove('hidden');
   document.getElementById('reticle-overlay').classList.add('hidden');
@@ -914,6 +969,8 @@ function handlePhotoUpload(event) {
   const file = event.target.files?.[0];
   if (!file) return;
 
+  stopCameraStream();
+
   const reader = new FileReader();
   reader.onload = () => {
     const dataUrl = reader.result;
@@ -922,8 +979,12 @@ function handlePhotoUpload(event) {
     previewImg.classList.remove('hidden');
     document.getElementById('reticle-overlay').classList.add('hidden');
 
-    const cleanName = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
-    extractNutritionFromImage(dataUrl, capitalize(cleanName) || 'Uploaded Food');
+    const isNativeCameraCapture = event.target.id === 'mobile-camera-capture';
+    const cleanName = isNativeCameraCapture
+      ? 'Scanned Food'
+      : capitalize(file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ')) || 'Uploaded Food';
+
+    extractNutritionFromImage(dataUrl, cleanName);
   };
   reader.readAsDataURL(file);
 }
@@ -951,6 +1012,9 @@ function initEvents() {
   });
 
   document.getElementById('capture-photo-btn').addEventListener('click', captureCameraFrame);
+  document.getElementById('cancel-camera-btn').addEventListener('click', stopCameraStream);
+
+  document.getElementById('mobile-camera-capture').addEventListener('change', handlePhotoUpload);
 
   document.getElementById('image-upload').addEventListener('change', (e) => {
     requireSetupThenRun(() => handlePhotoUpload(e));
