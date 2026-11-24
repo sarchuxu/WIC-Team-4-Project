@@ -1,359 +1,588 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="day">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>banana banana banana</title>
-    <meta
-      name="description"
-      content="AI-powered nutrition tracking and healthy eating companion."
+    <title>VitaCoach — No Guesswork. Just Real Nutrition.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Kaushan+Script&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="app-shell">
-      <aside class="sidebar">
-        <div class="brand">
-          <div class="brand-mark">V</div>
-          <div>
-            <p class="eyebrow">Wellness companion</p>
-            <h1>VitaCoach</h1>
+    <!-- Reusable 5-Petal Japanese Sakura Blossom & Single Petal Definitions -->
+    <svg width="0" height="0" style="position: absolute;" aria-hidden="true">
+      <defs>
+        <g id="sakura-flower">
+          <path d="M0 -3 C-7 -12 -11 -22 0 -27 C11 -22 7 -12 0 -3 Z" fill="var(--sakura-petal)" />
+          <path d="M0 -3 C-7 -12 -11 -22 0 -27 C11 -22 7 -12 0 -3 Z" fill="var(--sakura-petal)" transform="rotate(72)" />
+          <path d="M0 -3 C-7 -12 -11 -22 0 -27 C11 -22 7 -12 0 -3 Z" fill="var(--sakura-petal)" transform="rotate(144)" />
+          <path d="M0 -3 C-7 -12 -11 -22 0 -27 C11 -22 7 -12 0 -3 Z" fill="var(--sakura-petal)" transform="rotate(216)" />
+          <path d="M0 -3 C-7 -12 -11 -22 0 -27 C11 -22 7 -12 0 -3 Z" fill="var(--sakura-petal)" transform="rotate(288)" />
+          <circle cx="0" cy="0" r="6" fill="var(--sakura-core)" />
+          <circle cx="-4" cy="-5" r="1.4" fill="var(--sakura-stamen)" />
+          <circle cx="5" cy="-4" r="1.4" fill="var(--sakura-stamen)" />
+          <circle cx="4" cy="5" r="1.4" fill="var(--sakura-stamen)" />
+          <circle cx="-5" cy="4" r="1.4" fill="var(--sakura-stamen)" />
+          <circle cx="0" cy="-7" r="1.4" fill="var(--sakura-stamen)" />
+        </g>
+
+        <g id="sakura-flower-deep">
+          <path d="M0 -3 C-7 -12 -11 -22 0 -27 C11 -22 7 -12 0 -3 Z" fill="var(--sakura-deep)" />
+          <path d="M0 -3 C-7 -12 -11 -22 0 -27 C11 -22 7 -12 0 -3 Z" fill="var(--sakura-deep)" transform="rotate(72)" />
+          <path d="M0 -3 C-7 -12 -11 -22 0 -27 C11 -22 7 -12 0 -3 Z" fill="var(--sakura-deep)" transform="rotate(144)" />
+          <path d="M0 -3 C-7 -12 -11 -22 0 -27 C11 -22 7 -12 0 -3 Z" fill="var(--sakura-deep)" transform="rotate(216)" />
+          <path d="M0 -3 C-7 -12 -11 -22 0 -27 C11 -22 7 -12 0 -3 Z" fill="var(--sakura-deep)" transform="rotate(288)" />
+          <circle cx="0" cy="0" r="5.5" fill="var(--sakura-core)" />
+          <circle cx="0" cy="0" r="2.2" fill="var(--sakura-stamen)" />
+        </g>
+
+        <path id="single-petal" d="M0 0 C-5 -6 -7 -13 0 -17 C7 -13 5 -6 0 0 Z" fill="var(--sakura-petal)" />
+      </defs>
+    </svg>
+
+    <!-- Full-Viewport Ambient Sakura Backdrop (Trees + Falling Petals Across Entire Screen) -->
+    <div class="sakura-stage" aria-hidden="true">
+      <!-- Left Gnarled Sakura Boughs -->
+      <svg class="sakura-tree tree-left" viewBox="0 0 420 920" fill="none" preserveAspectRatio="xMinYMid slice">
+        <path d="M-18 920 C26 730 38 545 20 355 C8 220 34 105 68 -10" stroke="var(--bark)" stroke-width="24" stroke-linecap="round" />
+        <g class="sway-slow">
+          <path d="M26 165 C108 130 198 142 310 196" stroke="var(--bark)" stroke-width="9" stroke-linecap="round" />
+          <path d="M138 144 C192 106 254 96 332 118" stroke="var(--bark)" stroke-width="5" stroke-linecap="round" />
+          <path d="M196 158 C244 186 286 216 326 248" stroke="var(--bark)" stroke-width="4" stroke-linecap="round" />
+          <use href="#sakura-flower-deep" transform="translate(104, 144) scale(1.2)" />
+          <use href="#sakura-flower" transform="translate(146, 124) scale(1.35)" />
+          <use href="#sakura-flower-deep" transform="translate(186, 148) scale(1.15)" />
+          <use href="#sakura-flower" transform="translate(226, 112) scale(1.3)" />
+          <use href="#sakura-flower" transform="translate(274, 104) scale(1.1)" />
+          <use href="#sakura-flower-deep" transform="translate(324, 120) scale(1.2)" />
+          <use href="#sakura-flower" transform="translate(254, 168) scale(1.4)" />
+          <use href="#sakura-flower-deep" transform="translate(298, 194) scale(1.25)" />
+          <use href="#sakura-flower" transform="translate(326, 244) scale(1.1)" />
+          <use href="#sakura-flower" transform="translate(166, 184) scale(1.0)" />
+        </g>
+        <g class="sway-medium">
+          <path d="M22 440 C110 404 205 416 310 472" stroke="var(--bark)" stroke-width="8.5" stroke-linecap="round" />
+          <path d="M150 420 C206 384 268 374 335 396" stroke="var(--bark)" stroke-width="4.5" stroke-linecap="round" />
+          <use href="#sakura-flower" transform="translate(96, 414) scale(1.25)" />
+          <use href="#sakura-flower-deep" transform="translate(142, 398) scale(1.2)" />
+          <use href="#sakura-flower" transform="translate(186, 422) scale(1.4)" />
+          <use href="#sakura-flower-deep" transform="translate(230, 388) scale(1.25)" />
+          <use href="#sakura-flower" transform="translate(278, 382) scale(1.15)" />
+          <use href="#sakura-flower-deep" transform="translate(328, 398) scale(1.2)" />
+          <use href="#sakura-flower" transform="translate(256, 448) scale(1.35)" />
+          <use href="#sakura-flower-deep" transform="translate(302, 472) scale(1.2)" />
+        </g>
+        <g class="sway-gentle">
+          <path d="M18 715 C98 680 182 694 268 744" stroke="var(--bark)" stroke-width="8" stroke-linecap="round" />
+          <use href="#sakura-flower-deep" transform="translate(92, 694) scale(1.2)" />
+          <use href="#sakura-flower" transform="translate(138, 678) scale(1.35)" />
+          <use href="#sakura-flower-deep" transform="translate(184, 702) scale(1.2)" />
+          <use href="#sakura-flower" transform="translate(232, 672) scale(1.25)" />
+          <use href="#sakura-flower" transform="translate(262, 740) scale(1.3)" />
+        </g>
+      </svg>
+
+      <!-- Right Gnarled Sakura Boughs -->
+      <svg class="sakura-tree tree-right" viewBox="0 0 420 920" fill="none" preserveAspectRatio="xMaxYMid slice">
+        <path d="M438 920 C394 730 382 545 400 355 C412 220 386 105 352 -10" stroke="var(--bark)" stroke-width="24" stroke-linecap="round" />
+        <g class="sway-medium">
+          <path d="M394 205 C312 170 222 182 110 236" stroke="var(--bark)" stroke-width="9" stroke-linecap="round" />
+          <path d="M282 184 C228 146 166 136 88 158" stroke="var(--bark)" stroke-width="5" stroke-linecap="round" />
+          <use href="#sakura-flower-deep" transform="translate(316, 184) scale(1.2)" />
+          <use href="#sakura-flower" transform="translate(274, 164) scale(1.35)" />
+          <use href="#sakura-flower-deep" transform="translate(234, 188) scale(1.15)" />
+          <use href="#sakura-flower" transform="translate(194, 152) scale(1.3)" />
+          <use href="#sakura-flower" transform="translate(146, 144) scale(1.1)" />
+          <use href="#sakura-flower-deep" transform="translate(96, 160) scale(1.2)" />
+          <use href="#sakura-flower" transform="translate(166, 208) scale(1.4)" />
+          <use href="#sakura-flower-deep" transform="translate(122, 234) scale(1.25)" />
+        </g>
+        <g class="sway-slow">
+          <path d="M398 485 C310 449 215 461 110 517" stroke="var(--bark)" stroke-width="8.5" stroke-linecap="round" />
+          <path d="M270 465 C214 429 152 419 85 441" stroke="var(--bark)" stroke-width="4.5" stroke-linecap="round" />
+          <use href="#sakura-flower" transform="translate(324, 459) scale(1.25)" />
+          <use href="#sakura-flower-deep" transform="translate(278, 443) scale(1.2)" />
+          <use href="#sakura-flower" transform="translate(234, 467) scale(1.4)" />
+          <use href="#sakura-flower-deep" transform="translate(190, 433) scale(1.25)" />
+          <use href="#sakura-flower" transform="translate(142, 427) scale(1.15)" />
+          <use href="#sakura-flower-deep" transform="translate(92, 443) scale(1.2)" />
+          <use href="#sakura-flower" transform="translate(164, 493) scale(1.35)" />
+          <use href="#sakura-flower-deep" transform="translate(118, 517) scale(1.2)" />
+        </g>
+        <g class="sway-gentle">
+          <path d="M402 750 C322 715 238 729 152 779" stroke="var(--bark)" stroke-width="8" stroke-linecap="round" />
+          <use href="#sakura-flower-deep" transform="translate(328, 729) scale(1.2)" />
+          <use href="#sakura-flower" transform="translate(282, 713) scale(1.35)" />
+          <use href="#sakura-flower-deep" transform="translate(236, 737) scale(1.2)" />
+          <use href="#sakura-flower" transform="translate(188, 707) scale(1.25)" />
+          <use href="#sakura-flower" transform="translate(158, 775) scale(1.3)" />
+        </g>
+      </svg>
+
+      <!-- Falling & Drifting Sakura Petals Across Entire Screen -->
+      <div class="falling-petals-layer">
+        <svg class="fall-item p1" viewBox="-12 -20 24 24"><use href="#single-petal" /></svg>
+        <svg class="fall-item p2" viewBox="-12 -20 24 24"><use href="#single-petal" /></svg>
+        <svg class="fall-item p3" viewBox="-30 -30 60 60"><use href="#sakura-flower" transform="scale(0.65)" /></svg>
+        <svg class="fall-item p4" viewBox="-12 -20 24 24"><use href="#single-petal" /></svg>
+        <svg class="fall-item p5" viewBox="-12 -20 24 24"><use href="#single-petal" /></svg>
+        <svg class="fall-item p6" viewBox="-30 -30 60 60"><use href="#sakura-flower-deep" transform="scale(0.6)" /></svg>
+        <svg class="fall-item p7" viewBox="-12 -20 24 24"><use href="#single-petal" /></svg>
+        <svg class="fall-item p8" viewBox="-12 -20 24 24"><use href="#single-petal" /></svg>
+        <svg class="fall-item p9" viewBox="-30 -30 60 60"><use href="#sakura-flower" transform="scale(0.55)" /></svg>
+        <svg class="fall-item p10" viewBox="-12 -20 24 24"><use href="#single-petal" /></svg>
+        <svg class="fall-item p11" viewBox="-12 -20 24 24"><use href="#single-petal" /></svg>
+        <svg class="fall-item p12" viewBox="-30 -30 60 60"><use href="#sakura-flower-deep" transform="scale(0.7)" /></svg>
+        <svg class="fall-item p13" viewBox="-12 -20 24 24"><use href="#single-petal" /></svg>
+        <svg class="fall-item p14" viewBox="-12 -20 24 24"><use href="#single-petal" /></svg>
+      </div>
+    </div>
+
+    <!-- Hamburger Slide-Out Drawer -->
+    <div id="drawer-backdrop" class="drawer-backdrop hidden" aria-hidden="true"></div>
+    <aside id="nav-drawer" class="nav-drawer" aria-label="Main navigation" aria-hidden="true">
+      <div class="drawer-top">
+        <span class="calligraphy-brand">VitaCoach</span>
+        <button type="button" id="close-drawer" class="icon-btn" aria-label="Close menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <p class="drawer-motto">No guesswork. Just real nutrition.</p>
+
+      <nav class="drawer-nav">
+        <button type="button" class="drawer-item active" data-target="scan-view">Scan Nutrition Facts</button>
+        <button type="button" class="drawer-item" data-target="dashboard-view">Daily Dashboard</button>
+        <button type="button" class="drawer-item" data-target="coach-view">Nutrition Coach (Ask AI)</button>
+        <button type="button" class="drawer-item" data-target="history-view">Past Food History</button>
+        <button type="button" class="drawer-item" data-target="profile-view">My Preferences &amp; Goals</button>
+      </nav>
+
+      <div class="drawer-progress">
+        <span class="micro-label">Today's Intake</span>
+        <div class="drawer-numbers">
+          <strong id="side-calories">0 / 1850 kcal</strong>
+          <span id="side-protein">0g protein</span>
+        </div>
+      </div>
+
+      <blockquote class="drawer-quote">
+        “You can’t manage what you don’t measure.”
+        <cite>— Peter Drucker</cite>
+      </blockquote>
+    </aside>
+
+    <!-- Full-Width Responsive App Shell -->
+    <div class="app-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button type="button" id="open-drawer" class="icon-btn" aria-label="Open menu">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          </button>
+          <div class="brand-cluster">
+            <h1 class="calligraphy-logo">VitaCoach</h1>
+            <p id="greeting-banner" class="greeting-text hidden"></p>
           </div>
         </div>
 
-        <nav class="nav-list" aria-label="Main navigation">
-          <button class="nav-item active" data-target="scan-view">
-            <span>Scan</span>
-          </button>
-          <button class="nav-item" data-target="dashboard-view">
-            <span>Dashboard</span>
-          </button>
-          <button class="nav-item" data-target="history-view">
-            <span>Food History</span>
-          </button>
-          <button class="nav-item" data-target="coach-view">
-            <span>AI Coach</span>
-          </button>
-          <button class="nav-item" data-target="profile-view">
-            <span>Profile</span>
-          </button>
-        </nav>
+        <button type="button" id="theme-toggle" class="theme-pill" aria-label="Toggle Day and Night mode">
+          <span class="theme-indicator"></span>
+          <span id="theme-label">Night Mode</span>
+        </button>
+      </header>
 
-        <div class="side-summary card">
-          <p class="muted">Daily goal</p>
-          <div class="big-value" id="side-calories">0 kcal</div>
-          <div class="mini-row">
-            <span>Protein</span>
-            <strong id="side-protein">0g</strong>
-          </div>
-        </div>
-      </aside>
-
-      <main class="main-panel">
-        <header class="topbar">
-          <div>
-            <p class="eyebrow">Good morning</p>
-            <h2 id="welcome-name">Alicia</h2>
-          </div>
-          <button class="secondary-btn" id="open-onboarding">Update goals</button>
-        </header>
-
+      <main class="main-stage">
+        <!-- 1. SCAN VIEW -->
         <section id="scan-view" class="view active">
-          <div class="hero-card card">
-            <div class="camera-panel">
-              <div class="camera-header">
-                <div>
-                  <p class="eyebrow">Camera-first tracking</p>
-                  <h3>Scan nutrition labels</h3>
-                </div>
-                <button class="small-action" id="enable-camera">Enable camera</button>
-              </div>
+          <div class="surface-card scan-hero">
+            <span class="tagline-script">No guesswork. Just real nutrition.</span>
+            <h2 class="calligraphy-heading">Scan Nutrition Facts</h2>
+            <p class="lead-copy">
+              Point your camera to the back label of any supermarket item and scan it.
+            </p>
 
-              <div class="camera-stage">
-                <video id="camera-feed" autoplay playsinline muted></video>
-                <div class="scan-overlay" aria-hidden="true">
-                  <div class="scan-frame"></div>
-                </div>
-              </div>
+            <!-- Added Confirmation Toast -->
+            <div id="added-banner" class="confirm-strip hidden">
+              <span id="added-banner-text">Added to your Daily Dashboard!</span>
+              <button type="button" class="btn-solid btn-sm" id="view-dash-btn">Open Dashboard</button>
+            </div>
 
-              <div class="camera-actions">
-                <button class="primary-btn" id="scan-sample">Use sample label</button>
-                <label class="secondary-btn upload-btn" for="image-upload">Upload photo</label>
-                <input id="image-upload" type="file" accept="image/*" hidden />
+            <!-- Scan Validation Warning Banner -->
+            <div id="scan-error-banner" class="error-strip hidden" role="alert">
+              <div class="error-copy">
+                <strong id="scan-error-title">Photo could not be read</strong>
+                <p id="scan-error-msg">Please scan a clear Nutrition Facts label and try again.</p>
+              </div>
+              <button type="button" class="btn-rust btn-sm" id="retry-scan-btn">Scan Again</button>
+            </div>
+
+            <div class="viewfinder">
+              <video id="camera-feed" autoplay playsinline muted></video>
+              <img id="captured-preview" class="captured-img hidden" alt="Captured nutrition label" />
+              <canvas id="capture-canvas" hidden></canvas>
+              <div id="reticle-overlay" class="reticle-overlay" aria-hidden="true">
+                <div class="reticle-frame">
+                  <div class="scan-line"></div>
+                </div>
               </div>
             </div>
 
-            <div class="scan-results">
-              <div class="results-header">
-                <p class="eyebrow">Detected food</p>
-                <h3>Label confirmation</h3>
-              </div>
+            <div class="scan-cta-row">
+              <button type="button" class="btn-gold" id="enable-camera">Tap Camera</button>
+              <button type="button" class="btn-wine hidden" id="capture-photo-btn">Capture Photo</button>
+              <label class="btn-solid" for="image-upload">Upload Photo</label>
+              <input id="image-upload" type="file" accept="image/*" hidden />
+            </div>
 
-              <div id="parsed-food-card" class="parsed-food-card empty-state">
-                <p>Scan a nutrition label to populate the food details.</p>
-              </div>
-
-              <form id="scan-form" class="scan-form">
-                <div class="form-row">
-                  <label>
-                    Product name
-                    <input id="food-name" type="text" value="Protein Crunch Granola Bar" />
-                  </label>
-                </div>
-
-                <div class="form-grid two-col">
-                  <label>
-                    Calories
-                    <input id="food-calories" type="number" value="180" />
-                  </label>
-                  <label>
-                    Serving size
-                    <input id="food-serving-size" type="number" value="35" />
-                  </label>
-                </div>
-
-                <div class="form-grid three-col">
-                  <label>
-                    Protein
-                    <input id="food-protein" type="number" value="10" />
-                  </label>
-                  <label>
-                    Carbs
-                    <input id="food-carbs" type="number" value="18" />
-                  </label>
-                  <label>
-                    Fat
-                    <input id="food-fat" type="number" value="7" />
-                  </label>
-                </div>
-
-                <div class="form-grid three-col">
-                  <label>
-                    Fiber
-                    <input id="food-fiber" type="number" value="4" />
-                  </label>
-                  <label>
-                    Sugar
-                    <input id="food-sugar" type="number" value="6" />
-                  </label>
-                  <label>
-                    Sodium
-                    <input id="food-sodium" type="number" value="150" />
-                  </label>
-                </div>
-
-                <div class="consumption-grid">
-                  <label>
-                    Portion consumed
-                    <input id="consumed-quantity" type="number" min="0.1" step="0.1" value="1" />
-                  </label>
-                  <label>
-                    Unit
-                    <select id="consumed-unit">
-                      <option value="serving">serving</option>
-                      <option value="g">grams</option>
-                      <option value="oz">ounces</option>
-                      <option value="cup">cups</option>
-                      <option value="piece">piece(s)</option>
-                    </select>
-                  </label>
-                  <label>
-                    Meal type
-                    <select id="meal-type">
-                      <option value="breakfast">Breakfast</option>
-                      <option value="lunch">Lunch</option>
-                      <option value="dinner">Dinner</option>
-                      <option value="snack" selected>Snack</option>
-                    </select>
-                  </label>
-                </div>
-
-                <div class="form-actions">
-                  <button type="button" class="secondary-btn" id="manual-entry">Add manual entry</button>
-                  <button type="submit" class="primary-btn">Save to food log</button>
-                </div>
-              </form>
+            <div class="helper-links">
+              <button type="button" class="text-link" id="try-sample-btn">or try a sample first</button>
+              <span class="dot-sep">•</span>
+              <button type="button" class="text-link" id="manual-type-btn">type label values instead</button>
             </div>
           </div>
+
+          <!-- Progressive Reveal -->
+          <div id="nutrition-reveal" class="surface-card reveal-section hidden">
+            <div class="section-head">
+              <div>
+                <h3 class="calligraphy-heading">Nutrition Facts &amp; Portion</h3>
+                <p class="lead-copy">Verify label numbers and log how much you ate.</p>
+              </div>
+              <span id="scan-status-pill" class="status-tag">Label Ready</span>
+            </div>
+
+            <div id="facts-summary-box" class="facts-grid"></div>
+
+            <form id="scan-form" class="clean-form">
+              <details id="edit-label-drawer" class="label-accordion">
+                <summary>Edit label numbers or food name</summary>
+                <div class="accordion-grid">
+                  <label>
+                    Food or Product Name
+                    <input id="food-name" type="text" value="Toasted Almond Oat Clusters" required />
+                  </label>
+                  <div class="grid-3">
+                    <label>
+                      Calories / serving
+                      <input id="food-calories" type="number" min="0" step="1" value="210" required />
+                    </label>
+                    <label>
+                      Serving size
+                      <input id="food-serving-size" type="number" min="0.1" step="0.1" value="45" required />
+                    </label>
+                    <label>
+                      Unit
+                      <select id="food-serving-unit">
+                        <option value="g" selected>grams (g)</option>
+                        <option value="ml">milliliters (ml)</option>
+                        <option value="oz">ounces (oz)</option>
+                        <option value="cup">cups</option>
+                        <option value="piece">piece(s)</option>
+                      </select>
+                    </label>
+                  </div>
+                  <div class="grid-3">
+                    <label>
+                      Protein (g)
+                      <input id="food-protein" type="number" min="0" step="0.1" value="9" />
+                    </label>
+                    <label>
+                      Carbs (g)
+                      <input id="food-carbs" type="number" min="0" step="0.1" value="27" />
+                    </label>
+                    <label>
+                      Fat (g)
+                      <input id="food-fat" type="number" min="0" step="0.1" value="8" />
+                    </label>
+                  </div>
+                  <div class="grid-3">
+                    <label>
+                      Fiber (g)
+                      <input id="food-fiber" type="number" min="0" step="0.1" value="5" />
+                    </label>
+                    <label>
+                      Sugar (g)
+                      <input id="food-sugar" type="number" min="0" step="0.1" value="7" />
+                    </label>
+                    <label>
+                      Sodium (mg)
+                      <input id="food-sodium" type="number" min="0" step="1" value="140" />
+                    </label>
+                  </div>
+                </div>
+              </details>
+
+              <div>
+                <span class="field-title">How much did you eat?</span>
+                <div class="pill-row">
+                  <button type="button" class="portion-pill" data-portion="0.5">Half (0.5×)</button>
+                  <button type="button" class="portion-pill active" data-portion="1">1 Serving</button>
+                  <button type="button" class="portion-pill" data-portion="1.5">1.5 Servings</button>
+                  <button type="button" class="portion-pill" data-portion="2">2 Servings</button>
+                </div>
+              </div>
+
+              <div class="grid-3">
+                <label>
+                  Quantity
+                  <input id="consumed-quantity" type="number" min="0.1" step="0.1" value="1" required />
+                </label>
+                <label>
+                  Unit
+                  <select id="consumed-unit">
+                    <option value="serving" selected>serving</option>
+                    <option value="g">grams (g)</option>
+                    <option value="ml">milliliters (ml)</option>
+                    <option value="oz">ounces (oz)</option>
+                    <option value="cup">cups</option>
+                    <option value="piece">piece(s)</option>
+                  </select>
+                </label>
+                <label>
+                  Meal
+                  <select id="meal-type">
+                    <option value="breakfast">Breakfast</option>
+                    <option value="lunch">Lunch</option>
+                    <option value="dinner">Dinner</option>
+                    <option value="snack" selected>Snack</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="portion-preview">
+                <span>Your portion totals:</span>
+                <strong id="preview-totals">210 kcal · 9g protein · 5g fiber · 140mg sodium</strong>
+              </div>
+
+              <button type="submit" class="btn-gold full-width">Add to Today's Meal Log</button>
+            </form>
+          </div>
+
+          <!-- Lotus Footer & Peter Drucker Quote -->
+          <footer class="lotus-footer">
+            <svg class="lotus-svg" viewBox="0 0 180 68" fill="none" aria-hidden="true">
+              <g class="lotus-breathe">
+                <path d="M90 10C76 28 76 46 90 58C104 46 104 28 90 10Z" fill="var(--sakura-petal)" opacity="0.9" />
+                <path d="M90 58C68 50 56 34 62 18C76 24 86 38 90 58Z" fill="var(--sakura-deep)" opacity="0.82" />
+                <path d="M90 58C112 50 124 34 118 18C104 24 94 38 90 58Z" fill="var(--sakura-deep)" opacity="0.82" />
+                <path d="M90 58C56 56 36 44 36 28C54 30 74 42 90 58Z" fill="var(--gold)" opacity="0.72" />
+                <path d="M90 58C124 56 144 44 144 28C126 30 106 42 90 58Z" fill="var(--gold)" opacity="0.72" />
+                <path d="M24 62C65 65 115 65 156 62" stroke="var(--sakura-petal)" stroke-width="1.6" stroke-linecap="round" opacity="0.6" />
+              </g>
+            </svg>
+            <p class="quote-script">“You can’t manage what you don’t measure.” <span>— Peter Drucker</span></p>
+          </footer>
         </section>
 
+        <!-- 2. DAILY DASHBOARD VIEW -->
         <section id="dashboard-view" class="view">
-          <div class="summary-row">
-            <div class="summary-card card accent">
-              <p class="muted">Calories</p>
-              <div class="value-stack">
-                <h3 id="today-calories">0</h3>
-                <span id="calories-remaining">0 left</span>
+          <div class="surface-card">
+            <div class="section-head">
+              <div>
+                <h2 class="calligraphy-heading">Daily Dashboard</h2>
+                <p class="lead-copy">Track how much is left for the day—calculated from your profile.</p>
               </div>
+              <button type="button" class="btn-gold btn-sm" id="dash-scan-btn">+ Scan Food</button>
             </div>
-            <div class="summary-card card">
-              <p class="muted">Protein</p>
-              <div class="value-stack">
-                <h3 id="today-protein">0g</h3>
-                <span id="protein-remaining">0g left</span>
-              </div>
-            </div>
-            <div class="summary-card card">
-              <p class="muted">Fiber</p>
-              <div class="value-stack">
-                <h3 id="today-fiber">0g</h3>
-                <span id="fiber-goal">goal</span>
-              </div>
-            </div>
-          </div>
 
-          <div class="dashboard-grid">
-            <div class="card analytics-card">
-              <div class="card-header compact">
-                <p class="eyebrow">Daily progress</p>
-                <h3>Goal completion</h3>
-              </div>
+            <!-- Empty State when nothing has been uploaded/logged today -->
+            <div id="dashboard-empty-state" class="empty-dash-box">
+              <span class="tagline-script">Fresh Start Today</span>
+              <h3>You haven’t logged anything today yet</h3>
+              <p>Scan or upload a Nutrition Facts label to see your live remaining calories, protein, fiber, and sodium.</p>
+              <button type="button" class="btn-gold" id="empty-dash-scan-btn">Upload or Scan Food</button>
+            </div>
 
-              <div class="ring-wrap">
-                <div id="progress-ring" class="progress-ring">
-                  <div class="ring-center">
-                    <span id="ring-percent">0%</span>
+            <!-- Active Content (Reveals once at least 1 item is logged today) -->
+            <div id="dashboard-active-content" class="hidden">
+              <!-- Compact Top Mini-Ring Strip -->
+              <div class="mini-ring-strip">
+                <div class="mini-ring-pill">
+                  <svg class="mini-ring-svg" viewBox="0 0 64 64" aria-hidden="true">
+                    <circle class="mini-track" cx="32" cy="32" r="25" />
+                    <circle id="ring-calories" class="mini-fill ring-gold" cx="32" cy="32" r="25" />
+                  </svg>
+                  <div class="mini-ring-info">
+                    <strong id="calories-remaining">1850 kcal left</strong>
+                    <small id="today-calories">0 / 1850 kcal</small>
+                  </div>
+                </div>
+
+                <div class="mini-ring-pill">
+                  <svg class="mini-ring-svg" viewBox="0 0 64 64" aria-hidden="true">
+                    <circle class="mini-track" cx="32" cy="32" r="25" />
+                    <circle id="ring-protein" class="mini-fill ring-olive" cx="32" cy="32" r="25" />
+                  </svg>
+                  <div class="mini-ring-info">
+                    <strong id="protein-remaining">105g left</strong>
+                    <small id="today-protein">0 / 105g protein</small>
+                  </div>
+                </div>
+
+                <div class="mini-ring-pill">
+                  <svg class="mini-ring-svg" viewBox="0 0 64 64" aria-hidden="true">
+                    <circle class="mini-track" cx="32" cy="32" r="25" />
+                    <circle id="ring-fiber" class="mini-fill ring-sakura" cx="32" cy="32" r="25" />
+                  </svg>
+                  <div class="mini-ring-info">
+                    <strong id="fiber-remaining">28g left</strong>
+                    <small id="today-fiber">0 / 28g fiber</small>
+                  </div>
+                </div>
+
+                <div class="mini-ring-pill">
+                  <svg class="mini-ring-svg" viewBox="0 0 64 64" aria-hidden="true">
+                    <circle class="mini-track" cx="32" cy="32" r="25" />
+                    <circle id="ring-sodium" class="mini-fill ring-rust" cx="32" cy="32" r="25" />
+                  </svg>
+                  <div class="mini-ring-info">
+                    <strong id="sodium-remaining">2300mg left</strong>
+                    <small id="today-sodium">0 / 2300mg sodium</small>
                   </div>
                 </div>
               </div>
 
-              <div class="legend-list">
-                <div>
-                  <span class="dot green"></span>
-                  <span>Calories</span>
+              <div class="bars-wrapper">
+                <div class="bar-group">
+                  <div class="bar-labels">
+                    <span>Daily Calorie Target</span>
+                    <strong id="meter-cal-label">0 / 1850 kcal (0%)</strong>
+                  </div>
+                  <div class="bar-track"><span id="bar-calories" class="bar-fill"></span></div>
                 </div>
-                <div>
-                  <span class="dot gold"></span>
-                  <span>Protein</span>
+
+                <div class="bar-group">
+                  <div class="bar-labels">
+                    <span>Protein Target</span>
+                    <strong id="meter-protein-label">0 / 105g (0%)</strong>
+                  </div>
+                  <div class="bar-track"><span id="bar-protein" class="bar-fill"></span></div>
+                </div>
+
+                <div class="bar-group">
+                  <div class="bar-labels">
+                    <span>Dietary Fiber Target</span>
+                    <strong id="meter-fiber-label">0 / 28g (0%)</strong>
+                  </div>
+                  <div class="bar-track"><span id="bar-fiber" class="bar-fill"></span></div>
+                </div>
+
+                <div class="bar-group">
+                  <div class="bar-labels">
+                    <span>Carbohydrates</span>
+                    <strong id="meter-carb-label">0 / 210g (0%)</strong>
+                  </div>
+                  <div class="bar-track"><span id="bar-carb" class="bar-fill"></span></div>
+                </div>
+
+                <div class="bar-group">
+                  <div class="bar-labels">
+                    <span>Fat</span>
+                    <strong id="meter-fat-label">0 / 60g (0%)</strong>
+                  </div>
+                  <div class="bar-track"><span id="bar-fat" class="bar-fill"></span></div>
+                </div>
+
+                <div class="bar-group">
+                  <div class="bar-labels">
+                    <span>Sodium Daily Limit</span>
+                    <strong id="meter-sodium-label">0 / 2300mg (0%)</strong>
+                  </div>
+                  <div class="bar-track"><span id="bar-sodium" class="bar-fill"></span></div>
                 </div>
               </div>
+
+              <h3 class="sub-heading">Today's Logged Foods</h3>
+              <div id="dashboard-log" class="entry-stack"></div>
             </div>
-
-            <div class="card analytics-card">
-              <div class="card-header compact">
-                <p class="eyebrow">Macro targets</p>
-                <h3>Nutrition balance</h3>
-              </div>
-
-              <div class="meter-group">
-                <div class="meter-label">
-                  <span>Protein</span>
-                  <strong id="meter-protein-label">0/0</strong>
-                </div>
-                <div class="meter"><span id="meter-protein" class="fill green"></span></div>
-              </div>
-
-              <div class="meter-group">
-                <div class="meter-label">
-                  <span>Carbohydrates</span>
-                  <strong id="meter-carb-label">0/0</strong>
-                </div>
-                <div class="meter"><span id="meter-carb" class="fill blue"></span></div>
-              </div>
-
-              <div class="meter-group">
-                <div class="meter-label">
-                  <span>Fat</span>
-                  <strong id="meter-fat-label">0/0</strong>
-                </div>
-                <div class="meter"><span id="meter-fat" class="fill orange"></span></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-header compact">
-              <p class="eyebrow">Nutrient focus</p>
-              <h3>Other metrics</h3>
-            </div>
-
-            <div class="metric-grid">
-              <div class="metric-box">
-                <p>Carbs</p>
-                <strong id="daily-carbs">0g</strong>
-              </div>
-              <div class="metric-box">
-                <p>Fat</p>
-                <strong id="daily-fat">0g</strong>
-              </div>
-              <div class="metric-box">
-                <p>Sugar</p>
-                <strong id="daily-sugar">0g</strong>
-              </div>
-              <div class="metric-box">
-                <p>Sodium</p>
-                <strong id="daily-sodium">0mg</strong>
-              </div>
-            </div>
-          </div>
-
-          <div class="card list-card">
-            <div class="card-header compact">
-              <p class="eyebrow">Daily log</p>
-              <h3>Meals and snacks</h3>
-            </div>
-            <div id="dashboard-log" class="log-list"></div>
           </div>
         </section>
 
-        <section id="history-view" class="view">
-          <div class="card list-card">
-            <div class="card-header compact">
-              <p class="eyebrow">Food history</p>
-              <h3>Recently logged foods</h3>
-            </div>
-            <div id="history-list" class="history-list"></div>
-          </div>
-        </section>
-
+        <!-- 3. NUTRITION COACH (ASK AI) VIEW -->
         <section id="coach-view" class="view">
-          <div class="chat-grid">
-            <div class="card coach-panel">
-              <div class="card-header compact">
-                <p class="eyebrow">AI nutrition coach</p>
-                <h3>Personalized guidance</h3>
-              </div>
+          <div class="surface-card">
+            <h2 class="calligraphy-heading">Nutrition Coach</h2>
+            <p class="lead-copy">Personalized guidance matched to your remaining daily budget and allergies.</p>
 
-              <div id="coach-response" class="coach-response"></div>
+            <div id="coach-response" class="coach-card"></div>
 
-              <div class="filter-row" aria-label="Recommendation types">
-                <button class="filter-chip active" data-coach-filter="balanced" type="button">Balanced</button>
-                <button class="filter-chip" data-coach-filter="high-protein" type="button">High protein</button>
-                <button class="filter-chip" data-coach-filter="low-calorie" type="button">Low calorie</button>
-                <button class="filter-chip" data-coach-filter="snack" type="button">Quick snack</button>
-              </div>
-
-              <div class="chat-input-row">
-                <input id="coach-input" type="text" placeholder="Ask: What should I eat for dinner?" />
-                <button class="primary-btn" id="send-coach">Ask</button>
-              </div>
+            <div class="pill-row" style="margin: 14px 0;">
+              <button type="button" class="portion-pill active" data-coach-filter="balanced">Balanced</button>
+              <button type="button" class="portion-pill" data-coach-filter="high-protein">High Protein</button>
+              <button type="button" class="portion-pill" data-coach-filter="low-calorie">Light &amp; Low-Cal</button>
+              <button type="button" class="portion-pill" data-coach-filter="snack">Quick Snack</button>
             </div>
 
-            <div class="card recommendation-panel">
-              <div class="card-header compact">
-                <p class="eyebrow">Smart suggestions</p>
-                <h3>Recommended foods</h3>
-              </div>
-              <div id="recommendations-list" class="recommendation-list"></div>
+            <div class="ask-row">
+              <input id="coach-input" type="text" placeholder="Ask: What should I eat for dinner? or How much sodium is left?" />
+              <button type="button" class="btn-gold" id="send-coach">Ask AI</button>
             </div>
+
+            <h3 class="sub-heading">Recommended Foods (Tap Add to Log)</h3>
+            <div id="recommendations-list" class="entry-stack"></div>
           </div>
         </section>
 
-        <section id="profile-view" class="view">
-          <div class="card settings-card">
-            <div class="card-header compact">
-              <p class="eyebrow">Profile</p>
-              <h3>Nutrition preferences</h3>
+        <!-- 4. PAST FOOD HISTORY VIEW -->
+        <section id="history-view" class="view">
+          <div class="surface-card">
+            <div class="section-head">
+              <div>
+                <h2 class="calligraphy-heading">Past Food History</h2>
+                <p class="lead-copy">Saved locally in your browser—tap “Log Again” to add any past meal to today.</p>
+              </div>
             </div>
+            <div id="history-list" class="entry-stack"></div>
+          </div>
+        </section>
 
-            <form id="settings-form" class="settings-form">
-              <div class="form-grid two-col">
+        <!-- 5. PREFERENCES & GOALS VIEW -->
+        <section id="profile-view" class="view">
+          <div class="surface-card">
+            <h2 class="calligraphy-heading">My Preferences &amp; Goals</h2>
+            <p class="lead-copy">Update your details below and click Save Preferences to recalculate your daily targets.</p>
+
+            <form id="settings-form" class="clean-form" style="margin-top: 16px;">
+              <div class="grid-3">
+                <label>
+                  Your Name
+                  <input id="profile-name" type="text" />
+                </label>
                 <label>
                   Age
                   <input id="profile-age" type="number" />
                 </label>
                 <label>
-                  Activity
+                  Sex
+                  <select id="profile-sex">
+                    <option value="Female">Female</option>
+                    <option value="Male">Male</option>
+                    <option value="Other">Prefer not to say</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="grid-3">
+                <label>
+                  Height (cm)
+                  <input id="profile-height" type="number" />
+                </label>
+                <label>
+                  Current Weight (kg)
+                  <input id="profile-weight" type="number" />
+                </label>
+                <label>
+                  Activity Level
                   <select id="profile-activity">
                     <option value="light">Light</option>
                     <option value="moderate">Moderate</option>
@@ -363,37 +592,30 @@
                 </label>
               </div>
 
-              <div class="form-grid two-col">
-                <label>
-                  Current weight (kg)
-                  <input id="profile-weight" type="number" />
-                </label>
-                <label>
-                  Goal weight (kg)
-                  <input id="profile-target-weight" type="number" />
-                </label>
+              <div>
+                <span class="field-title">Eating Goals</span>
+                <div class="pill-row">
+                  <label class="check-chip"><input type="checkbox" name="goal" value="Lose weight" /> Lose weight</label>
+                  <label class="check-chip"><input type="checkbox" name="goal" value="Maintain current weight" /> Maintain weight</label>
+                  <label class="check-chip"><input type="checkbox" name="goal" value="Build muscle" /> Build muscle</label>
+                  <label class="check-chip"><input type="checkbox" name="goal" value="Increase protein intake" /> Increase protein</label>
+                </div>
               </div>
 
-              <div class="chips-group">
-                <p class="small-label">Main goals</p>
-                <label class="chip-option"><input type="checkbox" name="goal" value="Lose weight" /> Lose weight</label>
-                <label class="chip-option"><input type="checkbox" name="goal" value="Maintain current weight" /> Maintain current weight</label>
-                <label class="chip-option"><input type="checkbox" name="goal" value="Build muscle" /> Build muscle</label>
-                <label class="chip-option"><input type="checkbox" name="goal" value="Eat healthier" /> Eat healthier</label>
-                <label class="chip-option"><input type="checkbox" name="goal" value="Increase protein intake" /> Increase protein</label>
+              <div>
+                <span class="field-title">Allergies (Strictly Excluded)</span>
+                <div class="pill-row">
+                  <label class="check-chip"><input type="checkbox" name="allergy" value="Peanuts" /> Peanuts</label>
+                  <label class="check-chip"><input type="checkbox" name="allergy" value="Tree nuts" /> Tree nuts</label>
+                  <label class="check-chip"><input type="checkbox" name="allergy" value="Dairy" /> Dairy</label>
+                  <label class="check-chip"><input type="checkbox" name="allergy" value="Eggs" /> Eggs</label>
+                  <label class="check-chip"><input type="checkbox" name="allergy" value="Soy" /> Soy</label>
+                </div>
               </div>
 
-              <div class="chips-group">
-                <p class="small-label">Dietary preferences</p>
-                <label class="chip-option"><input type="checkbox" name="diet" value="Mediterranean" /> Mediterranean</label>
-                <label class="chip-option"><input type="checkbox" name="diet" value="High-protein" /> High-protein</label>
-                <label class="chip-option"><input type="checkbox" name="diet" value="Vegetarian" /> Vegetarian</label>
-                <label class="chip-option"><input type="checkbox" name="diet" value="Low-carb" /> Low-carb</label>
-                <label class="chip-option"><input type="checkbox" name="diet" value="Dairy-free" /> Dairy-free</label>
-              </div>
-
-              <div class="form-actions right-align">
-                <button type="submit" class="primary-btn">Save profile</button>
+              <div class="save-row">
+                <button type="submit" class="btn-gold">Save Preferences</button>
+                <span id="profile-save-msg" class="auto-save-msg hidden">Saved! Your daily targets have been updated.</span>
               </div>
             </form>
           </div>
@@ -401,68 +623,84 @@
       </main>
     </div>
 
-    <div class="mobile-nav" aria-label="Mobile navigation">
-      <button class="mobile-item active" data-target="scan-view">Scan</button>
-      <button class="mobile-item" data-target="dashboard-view">Dashboard</button>
-      <button class="mobile-item" data-target="history-view">History</button>
-      <button class="mobile-item" data-target="coach-view">AI Coach</button>
-      <button class="mobile-item" data-target="profile-view">Profile</button>
-    </div>
+    <!-- First-Time Setup Modal -->
+    <div id="onboarding-modal" class="modal hidden" role="dialog" aria-modal="true">
+      <div class="modal-panel">
+        <span class="tagline-script">Getting Started</span>
+        <h2 class="calligraphy-heading">Personalize your daily targets</h2>
+        <p class="lead-copy">Enter your details so we can calculate your daily calories, protein, fiber, and sodium targets.</p>
 
-    <div id="onboarding-modal" class="modal">
-      <div class="modal-card card">
-        <div class="card-header compact">
-          <p class="eyebrow">Welcome</p>
-          <h3>Set up your nutrition goals</h3>
-        </div>
-
-        <form id="onboarding-form" class="settings-form">
-          <div class="form-grid two-col">
+        <form id="onboarding-form" class="clean-form" style="margin-top: 16px;">
+          <div class="grid-3">
             <label>
-              Name
-              <input id="onboarding-name" type="text" value="Alicia" />
+              Your Name
+              <input id="onboarding-name" type="text" placeholder="e.g. Maya" required />
             </label>
             <label>
               Age
-              <input id="onboarding-age" type="number" value="29" />
+              <input id="onboarding-age" type="number" value="26" required />
+            </label>
+            <label>
+              Sex
+              <select id="onboarding-sex">
+                <option value="Female" selected>Female</option>
+                <option value="Male">Male</option>
+                <option value="Other">Prefer not to say</option>
+              </select>
             </label>
           </div>
 
-          <div class="form-grid two-col">
+          <div class="grid-3">
             <label>
               Height (cm)
-              <input id="onboarding-height" type="number" value="168" />
+              <input id="onboarding-height" type="number" value="165" required />
             </label>
             <label>
-              Current weight (kg)
-              <input id="onboarding-weight" type="number" value="64" />
+              Weight (kg)
+              <input id="onboarding-weight" type="number" value="62" required />
+            </label>
+            <label>
+              Activity Level
+              <select id="onboarding-activity">
+                <option value="light">Light</option>
+                <option value="moderate" selected>Moderate</option>
+                <option value="active">Active</option>
+                <option value="athlete">Athlete</option>
+              </select>
             </label>
           </div>
 
-          <div class="chips-group">
-            <p class="small-label">What are your main goals?</p>
-            <label class="chip-option"><input type="checkbox" name="onboarding-goal" value="Lose weight" checked /> Lose weight</label>
-            <label class="chip-option"><input type="checkbox" name="onboarding-goal" value="Increase protein intake" checked /> Increase protein</label>
-            <label class="chip-option"><input type="checkbox" name="onboarding-goal" value="Eat healthier" checked /> Eat healthier</label>
-            <label class="chip-option"><input type="checkbox" name="onboarding-goal" value="Track calories" /> Track calories</label>
+          <div>
+            <span class="field-title">Your Goals</span>
+            <div class="pill-row">
+              <label class="check-chip"><input type="checkbox" name="onboarding-goal" value="Lose weight" checked /> Lose weight</label>
+              <label class="check-chip"><input type="checkbox" name="onboarding-goal" value="Increase protein intake" checked /> Increase protein</label>
+              <label class="check-chip"><input type="checkbox" name="onboarding-goal" value="Maintain current weight" /> Maintain weight</label>
+              <label class="check-chip"><input type="checkbox" name="onboarding-goal" value="Build muscle" /> Build muscle</label>
+            </div>
           </div>
 
-          <div class="chips-group">
-            <p class="small-label">Dietary preferences</p>
-            <label class="chip-option"><input type="checkbox" name="onboarding-diet" value="Mediterranean" checked /> Mediterranean</label>
-            <label class="chip-option"><input type="checkbox" name="onboarding-diet" value="High-protein" checked /> High-protein</label>
-            <label class="chip-option"><input type="checkbox" name="onboarding-diet" value="Low-sodium" /> Low-sodium</label>
-            <label class="chip-option"><input type="checkbox" name="onboarding-diet" value="Dairy-free" /> Dairy-free</label>
+          <div>
+            <span class="field-title">Allergies</span>
+            <div class="pill-row">
+              <label class="check-chip"><input type="checkbox" name="onboarding-allergy" value="Peanuts" /> Peanuts</label>
+              <label class="check-chip"><input type="checkbox" name="onboarding-allergy" value="Tree nuts" /> Tree nuts</label>
+              <label class="check-chip"><input type="checkbox" name="onboarding-allergy" value="Dairy" /> Dairy</label>
+              <label class="check-chip"><input type="checkbox" name="onboarding-allergy" value="Eggs" /> Eggs</label>
+              <label class="check-chip"><input type="checkbox" name="onboarding-allergy" value="Soy" /> Soy</label>
+            </div>
           </div>
 
-          <div class="form-actions">
-            <button type="button" class="secondary-btn" id="skip-onboarding">Use demo</button>
-            <button type="submit" class="primary-btn">Start tracking</button>
-          </div>
+          <p class="medical-note">
+            Note: Estimates use the Mifflin-St Jeor equation for general wellness guidance and are not medical advice.
+          </p>
+
+          <button type="submit" class="btn-gold full-width">Start Tracking</button>
         </form>
       </div>
     </div>
 
+    <script src="config.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
