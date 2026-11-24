@@ -208,7 +208,7 @@
             <span class="tagline-script">No guesswork. Just real nutrition.</span>
             <h2 class="calligraphy-heading">Scan Nutrition Facts</h2>
             <p class="lead-copy">
-              Point your camera to the back label of any supermarket item and scan it.
+              Upload a photo or take a picture of the Nutrition Facts label on any item.
             </p>
 
             <!-- Added Confirmation Toast -->
@@ -227,9 +227,7 @@
             </div>
 
             <div class="viewfinder">
-              <video id="camera-feed" autoplay playsinline muted></video>
               <img id="captured-preview" class="captured-img hidden" alt="Captured nutrition label" />
-              <canvas id="capture-canvas" hidden></canvas>
               <div id="reticle-overlay" class="reticle-overlay" aria-hidden="true">
                 <div class="reticle-frame">
                   <div class="scan-line"></div>
@@ -238,9 +236,7 @@
             </div>
 
             <div class="scan-cta-row">
-              <button type="button" class="btn-gold" id="enable-camera">Tap Camera</button>
-              <button type="button" class="btn-wine hidden" id="capture-photo-btn">Capture Photo</button>
-              <label class="btn-solid" for="image-upload">Upload Photo</label>
+              <label class="btn-gold" for="image-upload">Upload Photo</label>
               <input id="image-upload" type="file" accept="image/*" hidden />
             </div>
 
@@ -596,14 +592,14 @@
                 <span class="field-title">Eating Goals</span>
                 <div class="pill-row">
                   <label class="check-chip"><input type="checkbox" name="goal" value="Lose weight" /> Lose weight</label>
+                  <label class="check-chip"><input type="checkbox" name="goal" value="Increase protein intake" /> Increase protein</label>
                   <label class="check-chip"><input type="checkbox" name="goal" value="Maintain current weight" /> Maintain weight</label>
                   <label class="check-chip"><input type="checkbox" name="goal" value="Build muscle" /> Build muscle</label>
-                  <label class="check-chip"><input type="checkbox" name="goal" value="Increase protein intake" /> Increase protein</label>
                 </div>
               </div>
 
               <div>
-                <span class="field-title">Allergies (Strictly Excluded)</span>
+                <span class="field-title">Allergies</span>
                 <div class="pill-row">
                   <label class="check-chip"><input type="checkbox" name="allergy" value="Peanuts" /> Peanuts</label>
                   <label class="check-chip"><input type="checkbox" name="allergy" value="Tree nuts" /> Tree nuts</label>
@@ -613,10 +609,8 @@
                 </div>
               </div>
 
-              <div class="save-row">
-                <button type="submit" class="btn-gold">Save Preferences</button>
-                <span id="profile-save-msg" class="auto-save-msg hidden">Saved! Your daily targets have been updated.</span>
-              </div>
+              <button type="submit" class="btn-gold full-width">Save Preferences</button>
+              <p id="profile-save-msg" class="confirm-strip hidden">Preferences saved and daily targets recalculated!</p>
             </form>
           </div>
         </section>
