@@ -38,7 +38,6 @@ const defaultUser = {
 
 let pendingActionAfterSetup = null;
 let activeCoachFilter = 'balanced';
-let cameraStream = null;
 
 function loadState() {
   try {
@@ -76,7 +75,7 @@ function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
-/* Compress large mobile camera photos (12MP-48MP) so Cloudflare Worker & Gemini process them fast */
+/* Compress large mobile camera photos so Cloudflare Worker & Gemini process them quickly */
 function compressImageFile(file, maxDimension = 1024, quality = 0.82) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -173,39 +172,8 @@ async function callGemini({ prompt, base64DataUrl = null, jsonMode = false }) {
   return result?.candidates?.[0]?.content?.parts?.[0]?.text || '';
 }
 
-/* Automatically add a valid scanned item straight to Today's Dashboard */
-function autoLogExtractedFood(food) {
-  if (!state.setupComplete) {
-    state.setupComplete = true;
-  }
-  const mealType = document.getElementById('meal-type')?.value || 'snack';
-  const entry = {
-    id: `meal-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-    foodName: food.productName,
-    mealType,
-    consumedAt: Date.now(),
-    consumedQuantity: 1,
-    consumedUnit: 'serving',
-    totalCalories: Number(Number(food.calories || 0).toFixed(1)),
-    totalProtein: Number(Number(food.protein || 0).toFixed(1)),
-    totalCarbs: Number(Number(food.carbs || 0).toFixed(1)),
-    totalFat: Number(Number(food.fat || 0).toFixed(1)),
-    totalFiber: Number(Number(food.fiber || 0).toFixed(1)),
-    totalSodium: Number(Number(food.sodium || 0).toFixed(1))
-  };
-
-  state.foodLogs.unshift(entry);
-  saveState();
-  renderAll();
-
-  const banner = document.getElementById('added-banner');
-  document.getElementById('added-banner-text').textContent =
-    `Added ${entry.foodName} (${Math.round(entry.totalCalories)} kcal · ${Math.round(entry.totalProtein)}g protein) to Dashboard!`;
-  banner.classList.remove('hidden');
-}
-
 /* Strict Anti-Guessing Vision Extraction & Validation */
-async function extractNutritionFromImage(dataUrl, fallbackName = 'Scanned Food', autoAdd = true) {
+async function extractNutritionFromImage(dataUrl, fallbackName = 'Scanned Food') {
   hideScanError();
   document.getElementById('added-banner').classList.add('hidden');
 
@@ -263,7 +231,7 @@ Return ONLY valid JSON matching this exact schema:
       previewCard.classList.add('hidden');
       showScanError(
         'Invalid Photo — Not a Nutrition Label',
-        parsed.reason || 'That photo does not appear to be a food Nutrition Facts label. Please scan a valid label photo and try again.'
+        parsed.reason || 'That photo does not appear to be a food Nutrition Facts label. Please upload a valid label photo and try again.'
       );
       return;
     }
@@ -291,17 +259,13 @@ Return ONLY valid JSON matching this exact schema:
       sodium: getNumeric(parsed.sodium, 0)
     };
 
-    revealNutritionSection(extracted, 'Verified & Added by Gemini AI', false);
-
-    if (autoAdd) {
-      autoLogExtractedFood(extracted);
-    }
+    revealNutritionSection(extracted, 'Verified by Gemini AI', false);
   } catch (err) {
     console.error('Gemini OCR error:', err);
     previewCard.classList.add('hidden');
     showScanError(
       'Could Not Read Label — Try Again',
-      `Error: ${err.message || 'Could not process image'}. Hold steady in good light and try again.`
+      'There was an issue analyzing that image. Please hold the label steady in bright light and try again.'
     );
   }
 }
@@ -344,7 +308,6 @@ function closeDrawer() {
 }
 
 function setActiveView(viewId) {
-  stopCameraStream();
   document.querySelectorAll('.drawer-item').forEach((btn) => {
     btn.classList.toggle('active', btn.dataset.target === viewId);
   });
@@ -355,43 +318,13 @@ function setActiveView(viewId) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/* Stop Active Camera Hardware & Hide Live Video Feed Immediately */
-function stopCameraStream() {
-  if (cameraStream) {
-    cameraStream.getTracks().forEach((track) => track.stop());
-    cameraStream = null;
-  }
-  const video = document.getElementById('camera-feed');
-  if (video) {
-    video.srcObject = null;
-    video.classList.add('hidden');
-  }
-  const captureBtn = document.getElementById('capture-photo-btn');
-  if (captureBtn) {
-    captureBtn.classList.add('hidden');
-  }
-  const cancelBtn = document.getElementById('cancel-camera-btn');
-  if (cancelBtn) {
-    cancelBtn.classList.add('hidden');
-  }
-}
-
-/* Detect Mobile Phones & Tablets (including iPads in desktop mode) */
-function isMobileOrTabletDevice() {
-  const ua = navigator.userAgent || '';
-  const isTouchMac = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
-  return /Android|iPhone|iPad|iPod|Mobile|Tablet/i.test(ua) || isTouchMac;
-}
-
 /* Reset Scanner back to Clean Initial State */
 function resetScannerToCleanState(showAddedBanner = false, addedText = '') {
-  stopCameraStream();
   hideScanError();
   document.getElementById('nutrition-reveal').classList.add('hidden');
   document.getElementById('captured-preview').classList.add('hidden');
   document.getElementById('reticle-overlay').classList.remove('hidden');
   document.getElementById('image-upload').value = '';
-  document.getElementById('mobile-camera-capture').value = '';
   document.getElementById('consumed-quantity').value = 1;
   document.getElementById('consumed-unit').value = 'serving';
   document.querySelectorAll('[data-portion]').forEach((btn) => {
@@ -952,105 +885,10 @@ function handleOnboardingSubmit(event) {
   }
 }
 
-/* Device-Aware Camera Flow:
-   - Mobile & Tablet: Launches native rear camera (capture="environment") and auto-closes after snap
-   - Laptop / Desktop: Opens front webcam preview, then shuts off & hides camera immediately upon capture */
-async function startCamera() {
-  hideScanError();
-
-  if (isMobileOrTabletDevice()) {
-    stopCameraStream();
-    const mobileInput = document.getElementById('mobile-camera-capture');
-    mobileInput.value = '';
-    mobileInput.click();
-    return;
-  }
-
-  const video = document.getElementById('camera-feed');
-  const previewImg = document.getElementById('captured-preview');
-  const captureBtn = document.getElementById('capture-photo-btn');
-  const cancelBtn = document.getElementById('cancel-camera-btn');
-
-  previewImg.classList.add('hidden');
-  video.classList.remove('hidden');
-  document.getElementById('reticle-overlay').classList.remove('hidden');
-
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-    showScanError(
-      'Camera Unavailable',
-      'Your browser does not allow camera access here. Use Upload Photo or type label values instead.'
-    );
-    return;
-  }
-
-  try {
-    stopCameraStream();
-    cameraStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'user' },
-      audio: false
-    });
-    video.classList.remove('hidden');
-    video.srcObject = cameraStream;
-    await video.play();
-    captureBtn.classList.remove('hidden');
-    cancelBtn.classList.remove('hidden');
-  } catch {
-    stopCameraStream();
-    showScanError(
-      'Camera Permission Blocked',
-      'Please allow camera access in your browser address bar, or use Upload Photo instead.'
-    );
-  }
-}
-
-function captureCameraFrame() {
-  const video = document.getElementById('camera-feed');
-  const canvas = document.getElementById('capture-canvas');
-  const previewImg = document.getElementById('captured-preview');
-
-  if (!video.videoWidth) {
-    showScanError('Camera Not Ready', 'Wait a moment for the live camera preview to appear, then tap Capture Photo.');
-    return;
-  }
-
-  const maxDim = 1024;
-  let width = video.videoWidth;
-  let height = video.videoHeight;
-  if (width > maxDim || height > maxDim) {
-    if (width > height) {
-      height = Math.round((height * maxDim) / width);
-      width = maxDim;
-    } else {
-      width = Math.round((width * maxDim) / height);
-      height = maxDim;
-    }
-  }
-
-  canvas.width = width;
-  canvas.height = height;
-  const ctx = canvas.getContext('2d');
-  ctx.save();
-  ctx.translate(canvas.width, 0);
-  ctx.scale(-1, 1);
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-  ctx.restore();
-
-  const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-
-  stopCameraStream();
-
-  previewImg.src = dataUrl;
-  previewImg.classList.remove('hidden');
-  document.getElementById('reticle-overlay').classList.add('hidden');
-
-  extractNutritionFromImage(dataUrl, 'Scanned Food', true);
-}
-
 async function handlePhotoUpload(event) {
   const file = event.target.files?.[0];
   if (!file) return;
 
-  stopCameraStream();
   hideScanError();
 
   try {
@@ -1060,17 +898,18 @@ async function handlePhotoUpload(event) {
     previewImg.classList.remove('hidden');
     document.getElementById('reticle-overlay').classList.add('hidden');
 
-    const isNativeCameraCapture = event.target.id === 'mobile-camera-capture';
-    const cleanName = isNativeCameraCapture
+    const cleanName = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+    const fallbackName = /^image$/i.test(cleanName.trim())
       ? 'Scanned Food'
-      : capitalize(file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ')) || 'Uploaded Food';
+      : capitalize(cleanName) || 'Scanned Food';
 
-    await extractNutritionFromImage(dataUrl, cleanName, true);
+    const runExtraction = () => extractNutritionFromImage(dataUrl, fallbackName);
+    requireSetupThenRun(runExtraction);
   } catch (err) {
     console.error('Photo processing error:', err);
     showScanError(
       'Photo Processing Error',
-      err.message || 'Could not process that photo. Please try taking or uploading the photo again.'
+      'Could not read that photo. Please try uploading or taking the photo again.'
     );
   }
 }
@@ -1093,19 +932,6 @@ function initEvents() {
     btn.addEventListener('click', () => setActiveView(btn.dataset.target));
   });
 
-  // Trigger mobile rear camera immediately inside click gesture so iOS Safari never blocks it
-  document.getElementById('enable-camera').addEventListener('click', () => {
-    if (isMobileOrTabletDevice()) {
-      startCamera();
-    } else {
-      requireSetupThenRun(startCamera);
-    }
-  });
-
-  document.getElementById('capture-photo-btn').addEventListener('click', captureCameraFrame);
-  document.getElementById('cancel-camera-btn').addEventListener('click', stopCameraStream);
-
-  document.getElementById('mobile-camera-capture').addEventListener('change', handlePhotoUpload);
   document.getElementById('image-upload').addEventListener('change', handlePhotoUpload);
 
   document.getElementById('retry-scan-btn').addEventListener('click', () => {
